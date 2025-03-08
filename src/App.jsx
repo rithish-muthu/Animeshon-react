@@ -5,8 +5,8 @@ import Index from './Index.jsx'
 import Login from './Login.jsx'
 import Signup from './Signup.jsx'
 import Error from './Error.jsx'
-import Details from './details.jsx'
 import Wishlist from './Wishlist.jsx';
+import Details from './details.jsx';
 
 const router = createBrowserRouter([
   {
