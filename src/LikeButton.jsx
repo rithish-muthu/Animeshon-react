@@ -1,15 +1,28 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const Checkbox = () => {
+const Checkbox = ({ isChecked }) => {
   return (
     <StyledWrapper>
       <div>
-        <input id="toggle-heart" type="checkbox" /><label htmlFor="toggle-heart" aria-label="like">❤</label>
+        <input
+          id="toggle-heart"
+          type="checkbox"
+          checked={isChecked} // Controlled by parent state
+          readOnly // Prevents uncontrolled component warning
+        />
+        <label
+          htmlFor="toggle-heart"
+          aria-label="like"
+          className={isChecked ? "text-red-500" : "text-gray-500"} // Red when wishlisted
+        >
+          ❤
+        </label>
       </div>
     </StyledWrapper>
   );
-}
+};
+
 
 const StyledWrapper = styled.div`
   [id='toggle-heart'] {

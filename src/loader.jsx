@@ -13,6 +13,16 @@ export function AddToWishlist() {
   );
 }
 
+export function RemoveFromWishlist() {
+  return (
+    <div className='w-fit '>
+    <Alert icon={<CheckIcon fontSize="inherit" />} severity="warning">
+      Removed From Wishlist! ❌
+    </Alert>
+    </div>
+  );
+}
+
 const Loader = () => {
   return (
     <>

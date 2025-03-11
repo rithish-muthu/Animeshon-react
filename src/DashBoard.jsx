@@ -86,75 +86,66 @@ function Dashboard() {
     return moviesList.map((movie) => (
       <div
         key={movie.id}
-        className="min-w-[200px] bg-gray-800 p-3 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300"
+        className="w-[250px] flex flex-col justify-between flex-shrink-0 bg-gray-800 border border-gray-700 p-4 rounded-lg shadow-md hover:shadow-xl transition-all duration-300 select-none"
       >
-        <h2 className="text-white font-semibold truncate">{movie.title}</h2>
+        <h2 className="text-lg font-semibold text-white truncate">{movie.title}</h2>
         <img
           src={movie.image || "https://example.com/placeholder-image.jpg"}
           alt={movie.title}
-          className="w-full h-48 object-cover rounded-md mt-2"
+          className="w-full h-40 object-cover rounded-md mt-2"
+          draggable ="false"
         />
-        <p className="text-gray-300 mt-2 text-sm">
+        <p className="text-gray-400 mt-2 text-sm">
           <strong>Genre:</strong> {movie.genres?.join(", ") || "No genres available"}
         </p>
-        <p className="text-gray-300 text-sm">
+        <p className="text-yellow-400 text-sm font-medium">
           <strong>Rating:</strong> {movie.rating || "N/A"}
         </p>
-        <p><a href={movie.trailer || "https://www.youtube.com/"} target="">Watch Trailer</a></p>
+        <p>
+          <a
+            href={movie.trailer || "https://www.youtube.com/"}
+            target="_blank"
+            className="text-blue-400 hover:text-blue-300 hover:underline mt-3 inline-block transition-colors"
+          >
+            🎬 Watch Trailer
+          </a>
+        </p>
         <button
-          onClick={() =>{
+          onClick={() => {
             window.localStorage.setItem("movie", JSON.stringify(movie));
             handleMovieClick(auth, navigate, movie);
-          } }
-          className="mt-3 w-full bg-blue-600 text-white py-1.5 rounded-lg hover:bg-blue-500 transition-colors"
+          }}
+          className="mt-4 w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-500 transition-all"
         >
-          Explore More
+          🔍 Explore More
         </button>
       </div>
     ));
+    
   };
 
   return (
-    <div className="p-4">
-      {/* Top Rated Section */}
-      <section className="mt-5">
-        <h1 className="text-2xl font-bold text-white mb-3">Top Rated</h1>
-        <div className="relative">
-          <div className="flex overflow-x-auto gap-4 py-2 scrollbar-hide">
-            {renderMovies(movies.topRated)}
+    <div className="p-6 bg-gray-900 min-h-screen">
+      {[
+        { title: "🔥 Top Rated", data: movies.topRated },
+        { title: "💖 Romantic", data: movies.romantic },
+        { title: "⚔️ Action", data: movies.action },
+        { title: "🕵️ Thriller", data: movies.thriller },
+      ].map((category) => (
+        <section key={category.title} className="mt-10">
+          <h1 className="text-3xl font-bold text-white mb-4">{category.title}</h1>
+          <div className="relative">
+            <div className="flex overflow-x-auto gap-4 py-2" style={{scrollbarWidth:"none"}}>
+              {renderMovies(category.data)}
+            </div>
           </div>
-        </div>
-      </section>
-
-      {/* Other Categories */}
-      <section className="mt-5">
-        <h1 className="text-2xl font-bold text-white mb-3">Romantic</h1>
-        <div className="relative">
-          <div className="flex overflow-x-auto gap-4 py-2 scrollbar-hide">
-            {renderMovies(movies.romantic)}
-          </div>
-        </div>
-      </section>
-
-      <section className="mt-5">
-        <h1 className="text-2xl font-bold text-white mb-3">Action</h1>
-        <div className="relative">
-          <div className="flex overflow-x-auto gap-4 py-2 scrollbar-hide">
-            {renderMovies(movies.action)}
-          </div>
-        </div>
-      </section>
-
-      <section className="mt-5">
-        <h1 className="text-2xl font-bold text-white mb-3">Thriller</h1>
-        <div className="relative">
-          <div className="flex overflow-x-auto gap-4 py-2 scrollbar-hide">
-            {renderMovies(movies.thriller)}
-          </div>
-        </div>
-      </section>
+        </section>
+      ))}
     </div>
   );
+  
+    
+
 }
 
 
