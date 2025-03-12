@@ -3,12 +3,12 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebas
 import { getAuth } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBwXdjJLt6SuSEI7Zxpu7yjw0KqVEXuLqk",
-  authDomain: "animeshon-ott.firebaseapp.com",
-  projectId: "animeshon-ott",
-  storageBucket: "animeshon-ott.appspot.com",
-  messagingSenderId: "66791238589",
-  appId: "1:66791238589:web:44be6f3a218b55e3ae00d4"
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID
 };
 
 // Initialize Firebase
@@ -92,7 +92,7 @@ function Dashboard() {
         <img
           src={movie.image || "https://example.com/placeholder-image.jpg"}
           alt={movie.title}
-          className="w-full h-40 object-cover rounded-md mt-2"
+          className="w-full h-40 object-cover rounded-md mt-2 transform scale-100 hover:scale-90 transition-transform duration-300"
           draggable ="false"
         />
         <p className="text-gray-400 mt-2 text-sm">

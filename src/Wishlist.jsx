@@ -6,12 +6,12 @@ import { handleMovieClick } from "./FirebaseAuth";
 import { useNavigate } from "react-router-dom";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBwXdjJLt6SuSEI7Zxpu7yjw0KqVEXuLqk",
-  authDomain: "animeshon-ott.firebaseapp.com",
-  projectId: "animeshon-ott",
-  storageBucket: "animeshon-ott.appspot.com",
-  messagingSenderId: "66791238589",
-  appId: "1:66791238589:web:44be6f3a218b55e3ae00d4",
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID
 };
 
 const app = initializeApp(firebaseConfig);
@@ -47,15 +47,15 @@ const Wishlist = () => {
       return () => unsubscribe();
     }, []);
   
-    const removeFromWishlist = async (itemId) => {
+    const removeFromWishlist = async (movieId) => {
       if (!user) return;
   
       try {
-        const itemRef = doc(db, `users/${user.uid}/wishlist`, itemId);
+        const itemRef = doc(db, `users/${user.uid}/wishlist`, movieId);
         await deleteDoc(itemRef);
   
         // Update local state
-        setWishlist((prevWishlist) => prevWishlist.filter((item) => item.id !== itemId));
+        setWishlist((prevWishlist) => prevWishlist.filter((movie) => movie.id !== movieId));
       } catch (error) {
         console.error("Error removing item from wishlist:", error);
       }
@@ -76,23 +76,23 @@ const Wishlist = () => {
           <p className="text-gray-400 text-center">No items in wishlist.</p>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-            {wishlist.map((item) => (
+            {wishlist.map((movie) => (
               <div
-                key={item.id}
+                key={movie.id}
                 className="bg-gray-800 border border-gray-700 p-4 w-[300px] rounded-lg shadow-md hover:shadow-xl transition-all duration-300"
               >
                 <h3 className="text-lg font-semibold text-white truncate">
-                  {item.title}
+                  {movie.title}
                 </h3>
                 <img
-                  src={item.image}
-                  alt={item.title}
+                  src={movie.image}
+                  alt={movie.title}
                   className="w-full h-80 object-cover rounded-md mt-2"
                 />
-                <p className="text-gray-400 mt-2 text-sm">{item.genres}</p>
-                <p className="text-yellow-400 text-sm font-medium">⭐ {item.rating}</p>
+                <p className="text-gray-400 mt-2 text-sm">{movie.genres}</p>
+                <p className="text-yellow-400 text-sm font-medium">⭐ {movie.rating}</p>
                 <a
-                  href={item.trailerUrl}
+                  href={movie.trailer}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-blue-400 hover:text-blue-300 hover:underline mt-3 inline-block transition-colors"
@@ -101,8 +101,8 @@ const Wishlist = () => {
                 </a>
                 <button
                   onClick={() => {
-                    window.localStorage.setItem("movie", JSON.stringify(item));
-                    handleMovieClick(auth, navigate, item);
+                    window.localStorage.setItem("movie", JSON.stringify(movie));
+                    handleMovieClick(auth, navigate, movie);
                   }}
                   className="mt-4 w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-500 transition-all"
                 >
@@ -110,7 +110,7 @@ const Wishlist = () => {
                 </button>
                 {/* Remove Button */}
                 <button
-                  onClick={() => removeFromWishlist(item.id)}
+                  onClick={() => removeFromWishlist(movie.id)}
                   className="mt-2 w-full bg-red-600 text-white py-2 rounded-lg hover:bg-red-500 transition-all"
                 >
                   Remove

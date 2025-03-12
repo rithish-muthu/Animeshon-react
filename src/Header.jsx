@@ -1,5 +1,5 @@
 import React from 'react';
-import logo from './assets/image (4).png'
+import logo from './assets/logo-1.jpg'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {faUser} from '@fortawesome/free-solid-svg-icons'
 import { Link } from 'react-router-dom';
@@ -17,12 +17,12 @@ import { useNavigate } from 'react-router-dom';
 
 // Firebase configuration
 const firebaseConfig = {
-    apiKey: "AIzaSyBwXdjJLt6SuSEI7Zxpu7yjw0KqVEXuLqk",
-    authDomain: "animeshon-ott.firebaseapp.com",
-    projectId: "animeshon-ott",
-    storageBucket: "animeshon-ott.appspot.com",
-    messagingSenderId: "66791238589",
-    appId: "1:66791238589:web:44be6f3a218b55e3ae00d4"
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID
 };
 
 
@@ -38,7 +38,7 @@ const auth = getAuth(app);
 
 function Header() {
   const [user, setUser] = useState(null);
-  const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const [isProfileOpen, setIsProfileOpen] = useState(null  );
   const location = useLocation();
   const profileRef = useRef(null);
   const navigate = useNavigate();
@@ -106,14 +106,14 @@ function Header() {
   }
 
   return (
-    <header className="p-4 sticky top-0 bg-white shadow-md z-50">
+    <header className="p-4 sticky top-0  bg-gray-800 shadow-2xs z-50 shadow-blue-200">
       <div className="container mx-auto flex justify-between items-center">
-        {/* Logo */}
+        {/* Logo */} 
         <div className="flex items-center gap-3">
-          <div onClick={logoClickHandle}>
-          <img src={logo} alt="Website Logo" className="rounded-full h-10 w-10" />
+          <div onClick={logoClickHandle} className=' '>
+          <img src={logo} alt="Website Logo" className="rounded-full h-14 w-14 mix-blend-plus-lighter"  />
           </div>
-          <div className="text-2xl font-bold text-gray-800">ANIMESHON</div>
+          <div className="text-2xl font-bold text-blue-50">ANIMESHON</div>
         </div>
 
         {/* Authentication & Profile */}
@@ -129,11 +129,10 @@ function Header() {
             </Link>
           )}
 
-          {/* Profile Dropdown (Visible if authenticated) */}
           {user && (
             <div className="relative" ref={profileRef}>
               <button
-                className="cursor-pointer text-gray-700 text-xl hover:text-blue-500 transition-colors duration-200"
+                className="cursor-pointer text-white text-xl hover:text-blue-500 transition-colors duration-200"
                 onClick={toggleProfile}
                 aria-expanded={isProfileOpen}
                 aria-label="Toggle profile menu"

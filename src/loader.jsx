@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import Alert from '@mui/material/Alert';
 import CheckIcon from '@mui/icons-material/Check';
+import CloseIcon from '@mui/icons-material/Close';
 
 export function AddToWishlist() {
   return (
@@ -16,7 +17,7 @@ export function AddToWishlist() {
 export function RemoveFromWishlist() {
   return (
     <div className='w-fit '>
-    <Alert icon={<CheckIcon fontSize="inherit" />} severity="warning">
+    <Alert icon={<CloseIcon fontSize="inherit" />} severity="error">
       Removed From Wishlist! ❌
     </Alert>
     </div>

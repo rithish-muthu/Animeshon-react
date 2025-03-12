@@ -10,12 +10,12 @@ import { getFirestore, doc, setDoc, deleteDoc, getDoc } from "firebase/firestore
 import { initializeApp } from "firebase/app";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBwXdjJLt6SuSEI7Zxpu7yjw0KqVEXuLqk",
-  authDomain: "animeshon-ott.firebaseapp.com",
-  projectId: "animeshon-ott",
-  storageBucket: "animeshon-ott.appspot.com",
-  messagingSenderId: "66791238589",
-  appId: "1:66791238589:web:44be6f3a218b55e3ae00d4",
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID
 };
 
 const app = initializeApp(firebaseConfig);
@@ -128,7 +128,10 @@ function Details() {
   if (!anime) return null;
 
   return (
-    <main>
+    <main className="h-[78vh]">
+      {wishlistMessageComponent && (
+  <div className="absolute right-0  top-25">{wishlistMessageComponent}</div>
+)}
       <div className="container mx-auto my-10 px-4 select-none">
         <div className="flex flex-col md:flex-row justify-center items-center md:items-start gap-6">
           <div className="md:w-1/3 w-full">
@@ -139,13 +142,14 @@ function Details() {
               draggable = "false"
             />
           </div>
-          <div className="md:w-2/3 w-full flex flex-col items-start justify-center">
+          <div className="md:w-2/3 w-full flex flex-col justify-between ">
             <h1 className="text-3xl font-bold">{anime.title}</h1>
             <p className="text-gray-700">Genres: {anime.genres}</p>
             <p className="text-gray-700">Rating: {anime.rating}</p>
             <p>
+              {console.log(anime)}
               <a
-                href={anime.trailer}
+                href={anime.trailerUrl}
                 target="_blank"
                 className="text-blue-500 hover:underline"
               >
@@ -164,9 +168,7 @@ function Details() {
           </div>
         </div>
       </div>
-      {wishlistMessageComponent && (
-  <div>{wishlistMessageComponent}</div>
-)}
+      
 
     </main>
   );
