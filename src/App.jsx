@@ -1,13 +1,12 @@
 
-import { createBrowserRouter, createMemoryRouter, RouterProvider } from 'react-router-dom';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import Dashboard from './Pages/DashBoard.jsx'
 import Index from './Index.jsx'
 import Login from './Pages/Login.jsx'
 import Signup from './Pages/Signup.jsx'
 import Error from './Pages/Error.jsx'
 import Wishlist from './Pages/Wishlist.jsx';
-import Details from './Pages/details.jsx'
-
+import AnimeDetails from './Pages/AnimeDetails.jsx';
 import Playing from './Pages/Playing.jsx';
 
 
@@ -31,7 +30,7 @@ const router = createBrowserRouter([
       },
       {
         path:'details/:movieName',
-        element:<Details/>
+        element:<AnimeDetails/>
       },
       {
         path:'wishlist',
