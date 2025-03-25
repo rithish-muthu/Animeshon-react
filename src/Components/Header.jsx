@@ -1,5 +1,5 @@
 import React from 'react';
-import logo from './assets/logo-1.jpg'
+import logo from '../assets/logo-1.jpg';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {faUser} from '@fortawesome/free-solid-svg-icons'
 import { Link } from 'react-router-dom';
@@ -12,7 +12,6 @@ import { useEffect, useState, useRef } from "react";
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
 import { getFirestore,doc, getDoc } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
 import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
-//onAuthStateChanged, collection, getDocs, query, where
 import { useNavigate } from 'react-router-dom';
 
 // Firebase configuration
@@ -43,7 +42,7 @@ function Header() {
   const profileRef = useRef(null);
   const navigate = useNavigate();
 
-  // Monitor authentication state
+
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (authUser) => {
       if (authUser) {
@@ -70,7 +69,7 @@ function Header() {
     return () => unsubscribe();
   }, []);
 
-  // Close profile when clicking outside
+
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (profileRef.current && !profileRef.current.contains(event.target)) {
@@ -96,7 +95,7 @@ function Header() {
     }
   };
   const isMain = location.pathname ==="/"
-  const isAuthPage = location.pathname === "/loggin" || location.pathname === "/signup";
+  const isAuthPage = location.pathname === "/login" || location.pathname === "/signup";
 
   const logoClickHandle = ()=>{
     if(!isMain){
@@ -108,7 +107,7 @@ function Header() {
   return (
     <header className="p-4 sticky top-0  bg-gray-800 shadow-2xs z-50 shadow-blue-200">
       <div className="container mx-auto flex justify-between items-center">
-        {/* Logo */} 
+         
         <div className="flex items-center gap-3">
           <div onClick={logoClickHandle} className=' '>
           <img src={logo} alt="Website Logo" className="rounded-full h-14 w-14 mix-blend-plus-lighter"  />
@@ -116,9 +115,9 @@ function Header() {
           <div className="text-2xl font-bold text-blue-50">ANIMESHON</div>
         </div>
 
-        {/* Authentication & Profile */}
+      
         <div className="flex items-center gap-4 relative">
-          {/* Login Button (Visible if not authenticated) */}
+        
           {!isAuthPage && !user && (
             <Link to="/login">
               <button
@@ -140,7 +139,7 @@ function Header() {
                 <FontAwesomeIcon icon={faUser} size="2x" />
               </button>
 
-              {/* Profile Dropdown */}
+              {/* Profile */}
               <div
                 className={`absolute right-0 mt-2 w-72 bg-white p-4 border rounded-lg shadow-lg transition-all duration-300 transform ${
                   isProfileOpen ? "opacity-100 translate-y-0 visible" : "opacity-0 -translate-y-2 invisible"
@@ -158,7 +157,7 @@ function Header() {
                   </div>
                 </div>
 
-                {/* Logout Button */}
+               
                 <button
                   className="mt-4 w-full bg-red-500 text-white font-semibold py-2 rounded-lg transition-transform duration-200 hover:scale-105 hover:bg-red-600 active:scale-95"
                   onClick={handleLogout}

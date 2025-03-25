@@ -1,32 +1,33 @@
-import React from 'react'
+import React from "react";
 // import { useLocation } from 'react-router-dom'
-import { faUser } from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { Link } from 'react-router-dom'
-import {Formik, Form, Field} from 'formik'
-import * as Yup from 'yup'
-import { useNavigate } from 'react-router-dom'
-import { useState, useEffect } from 'react'
-import Loader from './loader'
+import { faUser } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Link } from "react-router-dom";
+import { Formik, Form, Field } from "formik";
+import * as Yup from "yup";
+import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import Loader from "../Components/loader";
 
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
-import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
+import {
+  getAuth,
+  signInWithEmailAndPassword,
+} from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
+import Button from "../Components/Button";
 
-// Your web app's Firebase configuration
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
   authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
   projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
   storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
   messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
-  appId: import.meta.env.VITE_FIREBASE_APP_ID
+  appId: import.meta.env.VITE_FIREBASE_APP_ID,
 };
 
-// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
-
 
 const formSchema = Yup.object({
   email: Yup.string().email("Invalid email").required("Email is required"),
@@ -36,23 +37,22 @@ const formSchema = Yup.object({
 });
 
 function Login() {
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
 
-  useEffect(()=>{
-    async function loader(){
-      try{
+  useEffect(() => {
+    async function loader() {
+      try {
         setTimeout(() => {
           setLoading(false);
         }, 1000);
-      }
-      catch (error) {
+      } catch (error) {
         console.error("Error fetching movies:", error);
         setLoading(false);
       }
     }
-    loader()
-  },[]);
+    loader();
+  }, []);
   if (loading) {
     return (
       <div className="w-full h-screen flex justify-center items-center bg-black">
@@ -70,7 +70,7 @@ function Login() {
       );
 
       console.log("User logged in:", userCredential.user);
-      navigate("/"); 
+      navigate("/");
     } catch (error) {
       console.error("Login error:", error.message);
       setErrors({ general: error.message });
@@ -81,17 +81,14 @@ function Login() {
   return (
     <main className="flex items-center justify-center min-h-screen bg-gray-900">
       <div className="bg-gray-800 p-8 rounded-lg shadow-lg w-full max-w-sm">
-        {/* User Icon */}
         <div className="flex justify-center mb-4">
           <FontAwesomeIcon icon={faUser} size="2x" className="text-white" />
         </div>
 
-        {/* Form Title */}
         <h2 className="text-center text-xl font-semibold text-white mb-4">
           Login to Your Account
         </h2>
 
-        {/* Login Form */}
         <Formik
           initialValues={{ email: "", password: "" }}
           validationSchema={formSchema}
@@ -99,7 +96,6 @@ function Login() {
         >
           {({ errors, touched, isSubmitting }) => (
             <Form>
-              {/* Email Input */}
               <div className="mb-4">
                 <label className="block text-gray-300 text-sm font-medium mb-1">
                   Email:
@@ -111,11 +107,12 @@ function Login() {
                   placeholder="Enter your email"
                 />
                 {errors.email && touched.email && (
-                  <div className="text-red-400 text-sm mt-1">{errors.email}</div>
+                  <div className="text-red-400 text-sm mt-1">
+                    {errors.email}
+                  </div>
                 )}
               </div>
 
-              {/* Password Input */}
               <div className="mb-4">
                 <label className="block text-gray-300 text-sm font-medium mb-1">
                   Password:
@@ -127,32 +124,37 @@ function Login() {
                   placeholder="Enter your password"
                 />
                 {errors.password && touched.password && (
-                  <div className="text-red-400 text-sm mt-1">{errors.password}</div>
+                  <div className="text-red-400 text-sm mt-1">
+                    {errors.password}
+                  </div>
                 )}
               </div>
 
-              {/* General Error Message */}
               {errors.general && (
                 <div className="text-red-400 text-sm mb-4 text-center">
                   {errors.general}
                 </div>
               )}
 
-              {/* Login Button */}
               <div className="mb-4">
-                <button
-                  type="submit"
-                  className="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 rounded-lg transition-transform duration-200 hover:scale-105 active:scale-95"
-                  disabled={isSubmitting}
-                >
-                  {isSubmitting ? "Logging in..." : "Login"}
-                </button>
+                {isSubmitting ? (
+                  
+                  <Button action={"Logging in..."}/>
+                ) : (
+                  <button
+                    type="submit"
+                    className="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 rounded-lg transition-transform duration-200 hover:scale-105 active:scale-95"
+                    disabled={isSubmitting}
+                  >
+                    Login
+                    {/* {isSubmitting ? "Logging in..." : "Login"} */}
+                  </button>
+                )}
               </div>
             </Form>
           )}
         </Formik>
 
-        {/* Signup Link */}
         <div className="text-center text-gray-400 text-sm">
           Don't have an account?{" "}
           <Link to={"/signup"}>

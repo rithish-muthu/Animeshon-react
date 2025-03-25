@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { initializeApp } from "firebase/app";
 import { getFirestore, collection, getDocs, doc, deleteDoc } from "firebase/firestore";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
-import { handleMovieClick } from "./FirebaseAuth";
+import { handleMovieClick } from "../Components/FirebaseAuth";
 import { useNavigate } from "react-router-dom";
 
 const firebaseConfig = {
@@ -54,7 +54,7 @@ const Wishlist = () => {
         const itemRef = doc(db, `users/${user.uid}/wishlist`, movieId);
         await deleteDoc(itemRef);
   
-        // Update local state
+        
         setWishlist((prevWishlist) => prevWishlist.filter((movie) => movie.id !== movieId));
       } catch (error) {
         console.error("Error removing item from wishlist:", error);
@@ -70,10 +70,10 @@ const Wishlist = () => {
     }
   
     return (
-      <div className="p-6">
+      <div className="p-6 h-dvh bg-gray-900">
         <h2 className="text-2xl font-bold text-white mb-6">Your Wishlist</h2>
         {wishlist.length === 0 ? (
-          <p className="text-gray-400 text-center">No items in wishlist.</p>
+          <p className="text-gray-400 ">No items in wishlist.</p>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
             {wishlist.map((movie) => (
@@ -92,7 +92,7 @@ const Wishlist = () => {
                 <p className="text-gray-400 mt-2 text-sm">{movie.genres}</p>
                 <p className="text-yellow-400 text-sm font-medium">⭐ {movie.rating}</p>
                 <a
-                  href={movie.trailer}
+                  href={movie.trailerUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-blue-400 hover:text-blue-300 hover:underline mt-3 inline-block transition-colors"
@@ -101,6 +101,7 @@ const Wishlist = () => {
                 </a>
                 <button
                   onClick={() => {
+                    console.log(movie.description)
                     window.localStorage.setItem("movie", JSON.stringify(movie));
                     handleMovieClick(auth, navigate, movie);
                   }}
@@ -108,7 +109,7 @@ const Wishlist = () => {
                 >
                   Explore More
                 </button>
-                {/* Remove Button */}
+               
                 <button
                   onClick={() => removeFromWishlist(movie.id)}
                   className="mt-2 w-full bg-red-600 text-white py-2 rounded-lg hover:bg-red-500 transition-all"

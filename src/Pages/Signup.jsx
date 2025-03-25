@@ -4,19 +4,17 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Link } from 'react-router-dom'
 import { Formik, Form, Field } from 'formik'
 import * as Yup from 'yup'
-import Header from './Header'
 import { useNavigate } from 'react-router-dom'
 import { useState, useEffect } from 'react'
-import Loader from './loader'
+import Loader from '../Components/loader'
 
 
-// Import necessary Firebase functions
+
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
 import { getFirestore,setDoc,doc } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
 import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
-//onAuthStateChanged, collection, getDocs, query, where
+import Button from '../Components/Button'
 
-// Firebase configuration
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
   authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
@@ -28,7 +26,6 @@ const firebaseConfig = {
 
 
 
-// Initialize Firebase and Firestore
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const auth = getAuth(app);
@@ -76,12 +73,12 @@ function Signup() {
   return (
     <main className="flex justify-center items-center min-h-screen bg-gray-900 px-4">
       <div className="bg-gray-800 p-8 rounded-lg shadow-lg w-full max-w-md">
-        {/* User Icon */}
+       
         <div className="flex justify-center mb-4">
           <FontAwesomeIcon icon={faUser} size="12" />
         </div>
 
-        {/* Title */}
+       
         <h1 className="text-center text-2xl font-semibold text-white mb-6">
           Create an Account
         </h1>
@@ -97,23 +94,22 @@ function Signup() {
           validationSchema={formSchema}
           onSubmit={async (values, { setSubmitting, setErrors }) => {
             try {
-              // Step 1: Create user with Firebase Auth
+             
               const userCredential = await createUserWithEmailAndPassword(auth, values.email, values.password);
               const user = userCredential.user;
           
-              // Step 2: Store user details in Firestore
+              
               await setDoc(doc(db, "users", user.uid), {
                 firstName: values.firstName,
                 lastName: values.lastName,
                 email: values.email,
                 uid: user.uid,
-                createdAt: new Date().toISOString(), // Store signup time
+                createdAt: new Date().toISOString(), 
               });
           
               alert("Account created successfully!");
           
-              // // Step 3: Save user info in localStorage & navigate to home
-              // localStorage.setItem("user", JSON.stringify({ ...values, auth: true }));
+             
               navigate("/");
             } catch (error) {
               setErrors({ general: error.message });
@@ -124,7 +120,7 @@ function Signup() {
         >
           {({ errors, touched, isSubmitting }) => (
             <Form>
-              {/* First Name */}
+             
               <div className="mb-4">
                 <label className="block text-gray-300 text-sm font-medium mb-1">First Name:</label>
                 <Field
@@ -136,7 +132,7 @@ function Signup() {
                 {errors.firstName && touched.firstName && <div className="text-red-400">{errors.firstName}</div>}
               </div>
 
-              {/* Last Name */}
+              
               <div className="mb-4">
                 <label className="block text-gray-300 text-sm font-medium mb-1">Last Name:</label>
                 <Field
@@ -148,7 +144,7 @@ function Signup() {
                 {errors.lastName && touched.lastName && <div className="text-red-400">{errors.lastName}</div>}
               </div>
 
-              {/* Email */}
+              
               <div className="mb-4">
                 <label className="block text-gray-300 text-sm font-medium mb-1">Email:</label>
                 <Field
@@ -160,7 +156,7 @@ function Signup() {
                 {errors.email && touched.email && <div className="text-red-400">{errors.email}</div>}
               </div>
 
-              {/* Password */}
+              
               <div className="mb-4">
                 <label className="block text-gray-300 text-sm font-medium mb-1">Create Password:</label>
                 <Field
@@ -172,7 +168,7 @@ function Signup() {
                 {errors.password && touched.password && <div className="text-red-400">{errors.password}</div>}
               </div>
 
-              {/* Confirm Password */}
+             
               <div className="mb-4">
                 <label className="block text-gray-300 text-sm font-medium mb-1">Confirm Password:</label>
                 <Field
@@ -184,12 +180,12 @@ function Signup() {
                 {errors.confirmPassword && touched.confirmPassword && <div className="text-red-400">{errors.confirmPassword}</div>}
               </div>
 
-              {/* Error Message */}
+             
               {errors.general && <div className="text-red-400 text-center mb-4">{errors.general}</div>}
 
-              {/* Sign Up Button */}
+             
               <div className="mb-4">
-                <button
+                {/* <button
                   type="submit"
                   disabled={isSubmitting}
                   className={`w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 rounded-lg transition-transform duration-200 ${
@@ -197,13 +193,26 @@ function Signup() {
                   }`}
                 >
                   {isSubmitting ? "Signing Up..." : "Sign Up"}
-                </button>
+                </button> */}
+                {isSubmitting ? (
+                  
+                  <Button action={"Signing in..."}/>
+                ) : (
+                  <button
+                    type="submit"
+                    className="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 rounded-lg transition-transform duration-200 hover:scale-105 active:scale-95"
+                    disabled={isSubmitting}
+                  >
+                    Sign In
+                    
+                  </button>
+                )} 
               </div>
             </Form>
           )}
         </Formik>
 
-        {/* Login Link */}
+        
         <div className="text-center text-gray-400 text-sm">
           Already have an account?{" "}
           <Link to="/login" className="text-blue-400 hover:underline">

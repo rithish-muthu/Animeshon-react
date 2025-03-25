@@ -8,13 +8,13 @@ const Checkbox = ({ isChecked }) => {
         <input
           id="toggle-heart"
           type="checkbox"
-          checked={isChecked} // Controlled by parent state
-          readOnly // Prevents uncontrolled component warning
+          checked={isChecked} 
+          readOnly 
         />
         <label
           htmlFor="toggle-heart"
           aria-label="like"
-          className={isChecked ? "text-red-500" : "text-gray-500"} // Red when wishlisted
+          className={isChecked ? "text-red-500" : "text-gray-500"} 
         >
           ❤
         </label>

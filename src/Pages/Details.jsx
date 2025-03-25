@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 // import EpisodesPage from "./episodes";
-import Loader from "./loader";
-import Checkbox from "./LikeButton";
-import { AddToWishlist,RemoveFromWishlist } from "./loader";
-
+import Loader from "../Components/loader";
+import Checkbox from "../Components/LikeButton";
+import { AddToWishlist,RemoveFromWishlist } from "../Components/loader";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { getFirestore, doc, setDoc, deleteDoc, getDoc } from "firebase/firestore";
 import { initializeApp } from "firebase/app";
+import EpisodesPage from "../Components/Episodes";
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -27,11 +27,11 @@ function Details() {
   const [anime, setAnime] = useState(null);
   const [loading, setLoading] = useState(true);
   const [isWishlisted, setIsWishlisted] = useState(false);
-  // const [showWishlistMessage, setShowWishlistMessage] = useState(false);
+  
   const [user, setUser] = useState(null);
   const [wishlistMessageComponent, setWishlistMessageComponent] = useState(null);
 
-  // Track authentication state
+  
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
@@ -51,7 +51,7 @@ function Details() {
 
       setTimeout(() => {
         setLoading(false);
-      }, 3000);
+      }, 1000);
     } catch (error) {
       console.error("Error parsing localStorage data:", error);
       navigate("/");
@@ -61,7 +61,7 @@ function Details() {
 
   
   useEffect(() => {
-    if (user && anime?.title) { // Ensure anime exists before running
+    if (user && anime?.title) { 
       const movieRef = doc(db, `users/${user.uid}/wishlist`, anime.title);
   
       getDoc(movieRef)
@@ -76,7 +76,7 @@ function Details() {
           console.error("Error checking wishlist status:", error);
         });
     }
-  }, [user, anime]); // Runs when `user` or `anime` changes
+  }, [user, anime]); 
   
 
   const toggleWishlist = async () => {
@@ -89,26 +89,29 @@ function Details() {
   
     try {
       if (isWishlisted) {
-        // Remove from wishlist
+      
         await deleteDoc(movieRef);
         setIsWishlisted(false);
         console.log("Removed from wishlist");
         setWishlistMessageComponent(<RemoveFromWishlist />);
       } else {
-        // Add to wishlist
+        
+        
         await setDoc(movieRef, {
           title: anime.title,
           image: anime.image,
           genres: anime.genres,
+          description: anime.description || "",
           rating: anime.rating,
-          trailerUrl: anime.trailer || "",
+          trailerUrl: anime.trailerUrl || ""
+           
         });
+        
         setIsWishlisted(true);
         console.log("Added to wishlist");
         setWishlistMessageComponent(<AddToWishlist />);
       }
   
-      // Hide message after 3 seconds
       setTimeout(() => {
         setWishlistMessageComponent(null);
       }, 3000);
@@ -128,39 +131,52 @@ function Details() {
   if (!anime) return null;
 
   return (
-    <main className="h-[78vh]">
+    <main className="bg-gray-900 text-white min-h-screen ">
       {wishlistMessageComponent && (
-  <div className="absolute right-0  top-25">{wishlistMessageComponent}</div>
-)}
-      <div className="container mx-auto my-10 px-4 select-none">
-        <div className="flex flex-col md:flex-row justify-center items-center md:items-start gap-6">
+        <div className="absolute right-5 top-10">{wishlistMessageComponent}</div>
+      )}
+  
+      <div className="container mx-auto mb-10 pt-10 px-4 h-[100vh]">
+        <div className="flex flex-col md:flex-row items-center gap-8">
+    
           <div className="md:w-1/3 w-full">
             <img
               src={anime.image}
-              alt="Movie Image"
-              className="w-full rounded-lg shadow-lg"
-              draggable = "false"
+              alt="Anime"
+              className="w-full rounded-lg shadow-xl"
+              draggable="false"
             />
           </div>
-          <div className="md:w-2/3 w-full flex flex-col justify-between ">
-            <h1 className="text-3xl font-bold">{anime.title}</h1>
-            <p className="text-gray-700">Genres: {anime.genres}</p>
-            <p className="text-gray-700">Rating: {anime.rating}</p>
-            <p>
-              {console.log(anime)}
-              <a
-                href={anime.trailerUrl}
-                target="_blank"
-                className="text-blue-500 hover:underline"
-              >
-                Watch Trailer
-              </a>
+  
+         
+          <div className="md:w-2/3 w-full flex flex-col space-y-4">
+            <h1 className="text-4xl font-bold">{anime.title}</h1>
+            <p className="text-gray-300">
+              <span className="font-semibold">Genres:</span> {anime.genres}
             </p>
-            <div className="text-gray-800">{anime.description}</div>
-            <div className="flex gap-10">
-              <button className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700">
+            <p className="text-gray-300">
+              <span className="font-semibold">Rating:</span> {anime.rating}
+            </p>
+  
+            {anime.trailerUrl && (
+              <p>
+                <a
+                  href={anime.trailerUrl}
+                  target="_blank"
+                  className="text-blue-400 hover:text-blue-500 transition"
+                >
+                  🎬 Watch Trailer
+                </a>
+              </p>
+            )}
+  
+            <p className="text-gray-400 leading-relaxed">{anime.description}</p>
+  
+            <div className="flex gap-6 mt-4">
+              {/* <button className="px-6 py-2 bg-blue-600 text-white rounded-lg shadow-md hover:bg-blue-700 transition">
                 Go to Episodes
-              </button>
+              </button> */}
+  
               <button onClick={toggleWishlist}>
                 <Checkbox isChecked={isWishlisted} />
               </button>
@@ -168,10 +184,12 @@ function Details() {
           </div>
         </div>
       </div>
+  
       
-
+      <EpisodesPage id={anime?.id || ""} />
     </main>
   );
+  
 }
 
 export default Details;

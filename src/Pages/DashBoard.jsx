@@ -11,7 +11,7 @@ const firebaseConfig = {
   appId: import.meta.env.VITE_FIREBASE_APP_ID
 };
 
-// Initialize Firebase
+
 const app = initializeApp(firebaseConfig);
  const auth = getAuth(app);
 
@@ -19,10 +19,10 @@ const app = initializeApp(firebaseConfig);
 
 
  import React, { useEffect, useState } from "react";
-import { getMoviesByCategory } from "./getMovies";
+import { getMoviesByCategory } from "../Components/getMovies";
 import { useNavigate } from "react-router-dom";
-import { handleMovieClick } from "./FirebaseAuth";
-import Loader from "./loader";
+import { handleMovieClick } from "../Components/FirebaseAuth";
+import Loader from "../Components/loader";
 
 
 function Dashboard() {
@@ -86,13 +86,17 @@ function Dashboard() {
     return moviesList.map((movie) => (
       <div
         key={movie.id}
-        className="w-[250px] flex flex-col justify-between flex-shrink-0 bg-gray-800 border border-gray-700 p-4 rounded-lg shadow-md hover:shadow-xl transition-all duration-300 select-none"
+        className="w-[250px] flex flex-col justify-between flex-shrink-0 bg-gray-800 border border-gray-700 p-4 rounded-lg shadow-md hover:shadow-xl transition-all duration-300 select-none cursor-pointer hover:-translate-y-2"
+        onClick={()=>{
+          window.localStorage.setItem("movie", JSON.stringify(movie));
+          handleMovieClick(auth, navigate, movie);
+        }}
       >
         <h2 className="text-lg font-semibold text-white truncate">{movie.title}</h2>
         <img
           src={movie.image || "https://example.com/placeholder-image.jpg"}
           alt={movie.title}
-          className="w-full h-40 object-cover rounded-md mt-2 transform scale-100 hover:scale-90 transition-transform duration-300"
+          className="w-full h-40 object-cover rounded-md mt-2 transform scale-100 transition-transform duration-300"
           draggable ="false"
         />
         <p className="text-gray-400 mt-2 text-sm">

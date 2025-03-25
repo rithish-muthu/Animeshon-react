@@ -1,12 +1,15 @@
 
-import { createBrowserRouter, RouterProvider } from 'react-router-dom'
-import Dashboard from './DashBoard.jsx';
+import { createBrowserRouter, createMemoryRouter, RouterProvider } from 'react-router-dom';
+import Dashboard from './Pages/DashBoard.jsx'
 import Index from './Index.jsx'
-import Login from './Login.jsx'
-import Signup from './Signup.jsx'
-import Error from './Error.jsx'
-import Wishlist from './Wishlist.jsx';
-import Details from './details.jsx';
+import Login from './Pages/Login.jsx'
+import Signup from './Pages/Signup.jsx'
+import Error from './Pages/Error.jsx'
+import Wishlist from './Pages/Wishlist.jsx';
+import Details from './Pages/details.jsx'
+
+import Playing from './Pages/Playing.jsx';
+
 
 const router = createBrowserRouter([
   {
@@ -33,6 +36,10 @@ const router = createBrowserRouter([
       {
         path:'wishlist',
         element:<Wishlist/>
+      },
+      {
+        path:'playing/:id',
+        element:<Playing/>
       }
     ]
   }
