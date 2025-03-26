@@ -82,7 +82,7 @@ const EpisodesPage = ({ id }) => {
   }
 
   return (
-    <div className="max-w-6xl mx-auto p-6 h-[100vh]">
+    <div className="max-w-6xl mx-auto p-6">
       <h2 className="text-3xl font-bold mb-6 text-center text-white">{animeName} Episodes</h2>
   
       {loading ? (

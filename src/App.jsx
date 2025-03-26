@@ -12,7 +12,7 @@ import Playing from './Pages/Playing.jsx';
 
 const router = createBrowserRouter([
   {
-    path:"",
+    path:"/",
     element:<Index/>,
     errorElement:<Error/>,
     children:[

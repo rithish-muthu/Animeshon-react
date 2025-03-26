@@ -132,9 +132,9 @@ function AnimeDetails() {
 
   return (
     <main className="bg-gray-900 text-white min-h-screen ">
-      {wishlistMessageComponent && (
+      {wishlistMessageComponent && 
         <div className="absolute right-5 top-10">{wishlistMessageComponent}</div>
-      )}
+      }
   
       <div className="container mx-auto mb-10 pt-10 px-4 h-[100vh]">
         <div className="flex flex-col md:flex-row items-center gap-8">
