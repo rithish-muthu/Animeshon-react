@@ -51,7 +51,7 @@ function AnimeDetails() {
 
       setTimeout(() => {
         setLoading(false);
-      }, 1000);
+      }, 0);
     } catch (error) {
       console.error("Error parsing localStorage data:", error);
       navigate("/");
@@ -114,7 +114,7 @@ function AnimeDetails() {
   
       setTimeout(() => {
         setWishlistMessageComponent(null);
-      }, 3000);
+      },3000);
     } catch (error) {
       console.error("Error updating wishlist:", error);
     }
@@ -133,10 +133,10 @@ function AnimeDetails() {
   return (
     <main className="bg-gray-900 text-white min-h-screen ">
       {wishlistMessageComponent && 
-        <div className="absolute right-5 top-10">{wishlistMessageComponent}</div>
+        <div className="absolute right-5 top-24">{wishlistMessageComponent}</div>
       }
   
-      <div className="container mx-auto mb-10 pt-10 px-4 h-[100vh]">
+      <div className="container mx-auto mb-10 pt-10 px-4 h-[85vh]">
         <div className="flex flex-col md:flex-row items-center gap-8">
     
           <div className="md:w-1/3 w-full">
@@ -173,9 +173,7 @@ function AnimeDetails() {
             <p className="text-gray-400 leading-relaxed">{anime.description}</p>
   
             <div className="flex gap-6 mt-4">
-              {/* <button className="px-6 py-2 bg-blue-600 text-white rounded-lg shadow-md hover:bg-blue-700 transition">
-                Go to Episodes
-              </button> */}
+              
   
               <button onClick={toggleWishlist}>
                 <Checkbox isChecked={isWishlisted} />

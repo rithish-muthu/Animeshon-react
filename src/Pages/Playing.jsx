@@ -15,7 +15,7 @@ function Playing() {
       try {
         setTimeout(() => {
           setLoading(false);
-        }, 1500);
+        },0);
       } catch (error) {
         console.error("Error fetching movies:", error);
         setLoading(false);

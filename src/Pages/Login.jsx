@@ -45,7 +45,7 @@ function Login() {
       try {
         setTimeout(() => {
           setLoading(false);
-        }, 1000);
+        },0);
       } catch (error) {
         console.error("Error fetching movies:", error);
         setLoading(false);

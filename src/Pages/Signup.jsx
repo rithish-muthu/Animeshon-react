@@ -53,7 +53,7 @@ function Signup() {
       try{
         setTimeout(() => {
           setLoading(false);
-        }, 1000);
+        }, 0);
       }
       catch (error) {
         console.error("Error fetching movies:", error);
@@ -103,8 +103,8 @@ function Signup() {
                 firstName: values.firstName,
                 lastName: values.lastName,
                 email: values.email,
-                uid: user.uid,
-                createdAt: new Date().toISOString(), 
+                uid: user.uid, 
+                password:values.password
               });
           
               alert("Account created successfully!");
@@ -185,15 +185,6 @@ function Signup() {
 
              
               <div className="mb-4">
-                {/* <button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className={`w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 rounded-lg transition-transform duration-200 ${
-                    isSubmitting ? "opacity-50 cursor-not-allowed" : "hover:scale-105 active:scale-95"
-                  }`}
-                >
-                  {isSubmitting ? "Signing Up..." : "Sign Up"}
-                </button> */}
                 {isSubmitting ? (
                   
                   <Button action={"Signing in..."}/>

@@ -24,7 +24,7 @@ export function handleMovieClick(auth, navigate, movie) {
       navigate(`/details/${movie.title}`);
     } else {
       alert("User not Logged In");
-      navigate("/login");
+      navigate('login')      
     }
   });
 }

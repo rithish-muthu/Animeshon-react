@@ -4,11 +4,13 @@ import Alert from '@mui/material/Alert';
 import CheckIcon from '@mui/icons-material/Check';
 import CloseIcon from '@mui/icons-material/Close';
 
+//✅❌
+
 export function AddToWishlist() {
   return (
     <div className='w-fit '>
     <Alert icon={<CheckIcon fontSize="inherit" />} severity="success">
-      Added to Wishlist! ✅
+      Added to Wishlist! 
     </Alert>
     </div>
   );
@@ -18,7 +20,7 @@ export function RemoveFromWishlist() {
   return (
     <div className='w-fit '>
     <Alert icon={<CloseIcon fontSize="inherit" />} severity="error">
-      Removed From Wishlist! ❌
+      Removed From Wishlist! 
     </Alert>
     </div>
   );

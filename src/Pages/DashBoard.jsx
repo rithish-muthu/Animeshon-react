@@ -59,7 +59,7 @@ function Dashboard() {
         
         setTimeout(() => {
           setLoading(false);
-        }, 3000);
+        },0);
       } catch (error) {
         console.error("Error fetching movies:", error);
         setLoading(false);
@@ -68,6 +68,8 @@ function Dashboard() {
 
     fetchMovies();
   }, []);
+
+  
 
   if (loading) {
     return (
@@ -107,7 +109,7 @@ function Dashboard() {
         </p>
         <p>
           <a
-            href={movie.trailer || "https://www.youtube.com/"}
+            href={movie.trailer || ""}
             target="_blank"
             className="text-blue-400 hover:text-blue-300 hover:underline mt-3 inline-block transition-colors"
           >

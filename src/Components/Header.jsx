@@ -46,15 +46,15 @@ function Header() {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (authUser) => {
       if (authUser) {
-        try {
-          const userDocRef = doc(db, "users", authUser.uid);
-          const userDoc = await getDoc(userDocRef);
+        try {   
+            
+          const userDoc = await getDoc(doc(db, "users", authUser.uid) );
+   
 
           if (userDoc.exists()) {
-            setUser({
-              uid: authUser.uid,
-              ...userDoc.data(),
-            });
+           
+            console.log(userDoc.data())
+            setUser({...userDoc.data(),});
           } else {
             console.error("No user document found!");
           }
@@ -89,6 +89,7 @@ function Header() {
     if (window.confirm("Are you sure you want to log out?")) {
       try {
         await signOut(auth);
+        navigate('/')
       } catch (error) {
         alert(`Logout failed: ${error.message}`);
       }
@@ -109,7 +110,7 @@ function Header() {
       <div className="container mx-auto flex justify-between items-center">
          
         <div className="flex items-center gap-3">
-          <div onClick={logoClickHandle} className=' '>
+          <div onClick={logoClickHandle} className='cursor-pointer'>
           <img src={logo} alt="Website Logo" className="rounded-full h-14 w-14 mix-blend-plus-lighter"  />
           </div>
           <div className="text-2xl font-bold text-blue-50">ANIMESHON</div>

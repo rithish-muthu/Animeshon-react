@@ -35,26 +35,7 @@ const db = getFirestore(app);
         }
 
         
-        moviesData.forEach(movie => {
-           
-            const movieElement = document.createElement('div');
-            movieElement.classList.add('movie-card'); 
 
-           
-            const genres = movie.genres ? movie.genres.join(', ') : 'No genres available';
-
-            movieElement.innerHTML = `
-                <h2>${movie.title}</h2>
-                <img src="${movie.image || 'https://example.com/placeholder-image.jpg'}" alt="${movie.title}" style="width:200px;height:300px;" />
-                <p><strong>Genre:</strong> ${genres}</p>
-                <p><strong>Rating:</strong> ${movie.rating || 'N/A'}</p>
-                <p><a href="${movie.trailerUrl}" target="_blank" class = "btn-neon">Watch Trailer</a></p>
-                <button class="movie-btn" data-id="${movie.id}" data-name="${movie.title}">Explore More</button>
-            `;
-
-            
-            moviesContainer.appendChild(movieElement);
-        });
 
        
         const buttons = moviesContainer.querySelectorAll('.movie-btn');
@@ -79,33 +60,19 @@ const db = getFirestore(app);
     const q = query(moviesCollectionRef, where("category", "==", category));
     const snapshot = await getDocs(q);
 
-    const moviesData = snapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-    })); 
+    // snapshot.docs.forEach(doc=>console.log(doc.id))
+
+    // const moviesData = snapshot.docs.map(doc => ({
+    //     id: doc.id,
+    //     ...doc.data()
+    // }));
+
+    const moviesData = []
+    snapshot.docs.forEach(doc => moviesData.push(doc.data()))
+
+    // moviesData.forEach(data=>console.log(data))
+
+
     return moviesData;
+
 }
-
-
- export async function displayMovies() {
-    try {
-       
-        const topRatedMovies = await getMoviesByCategory("top rated");
-        const romanticMovies = await getMoviesByCategory("romantic");
-        const actionMovies = await getMoviesByCategory("action");
-        const thrillerMovies = await getMoviesByCategory("thriller");
-
-       
-        retrieveMovies(topRatedMovies, "top-rated"); 
-        retrieveMovies(romanticMovies, "romantic"); 
-        retrieveMovies(actionMovies, "action"); 
-        retrieveMovies(thrillerMovies, "thriller"); 
-    } catch (error) {
-        console.error("Error displaying movies:", error);
-    }
-}
-
-
-document.addEventListener("DOMContentLoaded", function () {
-    displayMovies();
-});
