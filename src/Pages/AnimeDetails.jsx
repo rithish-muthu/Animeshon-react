@@ -136,7 +136,7 @@ function AnimeDetails() {
         <div className="absolute right-5 top-24">{wishlistMessageComponent}</div>
       }
   
-      <div className="container mx-auto mb-10 pt-10 px-4 h-[85vh]">
+      <div className="container mx-auto mb-10 pt-10 px-4">
         <div className="flex flex-col md:flex-row items-center gap-8">
     
           <div className="md:w-1/3 w-full">
