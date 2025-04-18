@@ -1,19 +1,22 @@
 
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import Dashboard from './Pages/DashBoard.jsx'
-import Index from './Index.jsx'
 import Login from './Pages/Login.jsx'
 import Signup from './Pages/Signup.jsx'
 import Error from './Pages/Error.jsx'
 import Wishlist from './Pages/Wishlist.jsx';
 import AnimeDetails from './Pages/AnimeDetails.jsx';
 import Playing from './Pages/Playing.jsx';
+// import Practice from './Pages/Practice.jsx';
+
+import LayOut from './LayOut.jsx';
+
 
 
 const router = createBrowserRouter([
   {
     path:"/",
-    element:<Index/>,
+    element:<LayOut/>,
     errorElement:<Error/>,
     children:[
       {
@@ -48,6 +51,7 @@ function App() {
 
   return (
     <RouterProvider router={router}/>
+    // <Practice/>
   )
 }
 

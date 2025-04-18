@@ -1,27 +1,27 @@
-import React from 'react';
-import styled from 'styled-components';
-import Alert from '@mui/material/Alert';
-import CheckIcon from '@mui/icons-material/Check';
-import CloseIcon from '@mui/icons-material/Close';
+import React from "react";
+import styled from "styled-components";
+import Alert from "@mui/material/Alert";
+import CheckIcon from "@mui/icons-material/Check";
+import CloseIcon from "@mui/icons-material/Close";
 
 //✅❌
 
 export function AddToWishlist() {
   return (
-    <div className='w-fit '>
-    <Alert icon={<CheckIcon fontSize="inherit" />} severity="success">
-      Added to Wishlist! 
-    </Alert>
+    <div className="w-fit ">
+      <Alert icon={<CheckIcon fontSize="inherit" />} severity="success">
+        Added to Wishlist!
+      </Alert>
     </div>
   );
 }
 
 export function RemoveFromWishlist() {
   return (
-    <div className='w-fit '>
-    <Alert icon={<CloseIcon fontSize="inherit" />} severity="error">
-      Removed From Wishlist! 
-    </Alert>
+    <div className="w-fit ">
+      <Alert icon={<CloseIcon fontSize="inherit" />} severity="error">
+        Removed From Wishlist!
+      </Alert>
     </div>
   );
 }
@@ -29,21 +29,21 @@ export function RemoveFromWishlist() {
 const Loader = () => {
   return (
     <>
-    <div className='' >
-    <StyledWrapper>
-      <div className="sharingon">
-        <div className="ring">
-          <div className="to" />
-          <div className="to" />
-          <div className="to" />
-          <div className="circle" />
-        </div>
+      <div className="">
+        <StyledWrapper>
+          <div className="sharingon">
+            <div className="ring">
+              <div className="to" />
+              <div className="to" />
+              <div className="to" />
+              <div className="circle" />
+            </div>
+          </div>
+        </StyledWrapper>
       </div>
-    </StyledWrapper>
-    </div>
     </>
   );
-}
+};
 
 const StyledWrapper = styled.div`
   .sharingon {
@@ -61,20 +61,24 @@ const StyledWrapper = styled.div`
     top: 50%;
     width: 3.5em;
     height: 3.5em;
-    border: 4px solid rgb(110, 13 ,13 ,0.5);
-    transform: translate(-50%,-50%);
+    border: 4px solid rgb(110, 13, 13, 0.5);
+    transform: translate(-50%, -50%);
   }
 
-  .sharingon, .ring, .to,.circle {
+  .sharingon,
+  .ring,
+  .to,
+  .circle {
     border-radius: 50%;
   }
 
-  .to,.circle {
+  .to,
+  .circle {
     position: absolute;
     content: "";
     width: 0.9em;
     height: 0.9em;
-    background-color: black;
+    background-color: black;  
   }
 
   .to:nth-child(1) {
@@ -110,7 +114,7 @@ const StyledWrapper = styled.div`
   .circle {
     top: 50%;
     left: 50%;
-    transform: translate(-50%,-50%);
+    transform: translate(-50%, -50%);
     box-shadow: 0 0 20px 1px;
     width: 1em;
     height: 1em;
@@ -124,6 +128,7 @@ const StyledWrapper = styled.div`
     100% {
       transform: rotate(360deg);
     }
-  }`;
+  }
+`;
 
 export default Loader;

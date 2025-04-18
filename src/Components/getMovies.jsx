@@ -1,7 +1,7 @@
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
 import { getFirestore, collection, getDocs, query, where } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
-import { handleMovieClick } from "./FirebaseAuth";
+// import { handleMovieClick } from "./FirebaseAuth";
 
 
 const firebaseConfig = {
@@ -19,37 +19,37 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 
- export function retrieveMovies(moviesData, containerId) {
-    try {
-        const moviesContainer = document.getElementById(containerId); 
-        if (!moviesContainer) {
+//  export function retrieveMovies(moviesData, containerId) {
+//     try {
+//         const moviesContainer = document.getElementById(containerId); 
+//         if (!moviesContainer) {
             
-            return;
-        }
-        moviesContainer.innerHTML = ""; 
+//             return;
+//         }
+//         moviesContainer.innerHTML = ""; 
 
        
-        if (moviesData.length === 0) {
-            moviesContainer.innerHTML = "<p>No movies found.</p>";
-            return; 
-        }
+//         if (moviesData.length === 0) {
+//             moviesContainer.innerHTML = "<p>No movies found.</p>";
+//             return; 
+//         }
 
         
 
 
        
-        const buttons = moviesContainer.querySelectorAll('.movie-btn');
-        buttons.forEach(button => {
-            button.addEventListener('click', (e) => {
-                const movieId = e.target.getAttribute('data-id');
-                const movieName = e.target.getAttribute('data-name')
-                handleMovieClick(movieId,movieName);
-            });
-        });
-    } catch (error) {
-        console.error("Error retrieving data: ", error);
-    }
-}
+//         const buttons = moviesContainer.querySelectorAll('.movie-btn');
+//         buttons.forEach(button => {
+//             button.addEventListener('click', (e) => {
+//                 const movieId = e.target.getAttribute('data-id');
+//                 const movieName = e.target.getAttribute('data-name')
+//                 handleMovieClick(movieId,movieName);
+//             });
+//         });
+//     } catch (error) {
+//         console.error("Error retrieving data: ", error);
+//     }
+// }
 
 
 
@@ -59,18 +59,10 @@ const db = getFirestore(app);
     const moviesCollectionRef = collection(db, "movies");
     const q = query(moviesCollectionRef, where("category", "==", category));
     const snapshot = await getDocs(q);
-
-    // snapshot.docs.forEach(doc=>console.log(doc.id))
-
-    // const moviesData = snapshot.docs.map(doc => ({
-    //     id: doc.id,
-    //     ...doc.data()
-    // }));
+    console.log(snapshot)
 
     const moviesData = []
     snapshot.docs.forEach(doc => moviesData.push(doc.data()))
-
-    // moviesData.forEach(data=>console.log(data))
 
 
     return moviesData;

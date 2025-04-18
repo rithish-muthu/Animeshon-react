@@ -1,4 +1,3 @@
-
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
 import { getAuth } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
 
@@ -8,25 +7,20 @@ const firebaseConfig = {
   projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
   storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
   messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
-  appId: import.meta.env.VITE_FIREBASE_APP_ID
+  appId: import.meta.env.VITE_FIREBASE_APP_ID,
 };
 
-
 const app = initializeApp(firebaseConfig);
- const auth = getAuth(app);
+const auth = getAuth(app);
 
-
-
-
- import React, { useEffect, useState } from "react";
+import React, { useEffect, useState,useRef } from "react";
 import { getMoviesByCategory } from "../Components/getMovies";
 import { useNavigate } from "react-router-dom";
 import { handleMovieClick } from "../Components/FirebaseAuth";
 import Loader from "../Components/loader";
 
-
 function Dashboard() {
-   const navigate = useNavigate();
+  const navigate = useNavigate();
 
   const [movies, setMovies] = useState({
     topRated: [],
@@ -35,8 +29,11 @@ function Dashboard() {
     thriller: [],
   });
 
-
   const [loading, setLoading] = useState(true);
+  const [searchedArr, setSearchedArr] = useState([]);
+  // const [isSearch, setIsSearch] = useState(false);
+  const [searchValue, setSearchValue] = useState("");
+
 
   useEffect(() => {
     async function fetchMovies() {
@@ -49,6 +46,11 @@ function Dashboard() {
             getMoviesByCategory("thriller"),
           ]);
 
+        // const topRatedMovies = await getMoviesByCategory("top rated");
+        // const romanticMovies = await getMoviesByCategory("romantic");
+        // const actionMovies = await getMoviesByCategory("action");
+        // const thrillerMovies = await getMoviesByCategory("thriller");
+
         setMovies({
           topRated: topRatedMovies,
           romantic: romanticMovies,
@@ -56,10 +58,9 @@ function Dashboard() {
           thriller: thrillerMovies,
         });
 
-        
         setTimeout(() => {
           setLoading(false);
-        },0);
+        }, 0);
       } catch (error) {
         console.error("Error fetching movies:", error);
         setLoading(false);
@@ -69,7 +70,76 @@ function Dashboard() {
     fetchMovies();
   }, []);
 
+
+  useEffect(() => {
+    if (searchValue.trim() !== "") {
+      const allMovies = [
+        ...movies.topRated,
+        ...movies.romantic,
+        ...movies.action,
+        ...movies.thriller,
+      ];
   
+      const filtered = allMovies.filter((movie) =>
+        movie.title.toLowerCase().includes(searchValue.toLowerCase())
+      );
+  
+      setSearchedArr(filtered);
+    } else {
+      setSearchedArr([]);
+    }
+  }, [searchValue, movies]);
+
+
+
+  const [isListening, setIsListening] = useState(false);
+  const recognitionRef = useRef(null);
+
+  const startRecognition = () => {
+    const SpeechRecognition =
+      window.SpeechRecognition || window.webkitSpeechRecognition;
+
+    if (!SpeechRecognition) {
+      alert(
+        "Your browser doesn't support Speech Recognition. Try using Chrome."
+      );
+      return;
+    }
+ 
+
+    const recognition = new SpeechRecognition();
+    recognition.continuous = false; // Stop automatically after one phrase
+    recognition.interimResults = false;
+    recognition.lang = "en-US";
+
+    recognition.onresult = (event) => {
+      const transcript = event.results[0][0].transcript;
+      setSearchValue(transcript);
+    };
+
+    recognition.onerror = (event) => {
+      console.error("Speech recognition error:", event.error);
+    };
+
+    recognition.onend = () => {
+      setIsListening(false);
+    };
+
+    recognition.start();
+    recognitionRef.current = recognition;
+    setIsListening(true);
+  };
+
+  const stopRecognition = () => {
+    if (recognitionRef.current) {
+      recognitionRef.current.stop();
+      setIsListening(false);
+    }
+  };
+
+
+
+
 
   if (loading) {
     return (
@@ -78,6 +148,17 @@ function Dashboard() {
       </div>
     );
   }
+
+
+
+
+  
+  
+  
+
+
+
+
 
 
   const renderMovies = (moviesList) => {
@@ -89,20 +170,23 @@ function Dashboard() {
       <div
         key={movie.id}
         className="w-[250px] flex flex-col justify-between flex-shrink-0 bg-gray-800 border border-gray-700 p-4 rounded-lg shadow-md hover:shadow-xl transition-all duration-300 select-none cursor-pointer hover:-translate-y-2"
-        onClick={()=>{
+        onClick={() => {
           window.localStorage.setItem("movie", JSON.stringify(movie));
           handleMovieClick(auth, navigate, movie);
         }}
       >
-        <h2 className="text-lg font-semibold text-white truncate">{movie.title}</h2>
+        <h2 className="text-lg font-semibold text-white truncate">
+          {movie.title}
+        </h2>
         <img
           src={movie.image || "https://example.com/placeholder-image.jpg"}
           alt={movie.title}
           className="w-full h-40 object-cover rounded-md mt-2 transform scale-100 transition-transform duration-300"
-          draggable ="false"
+          draggable="false"
         />
         <p className="text-gray-400 mt-2 text-sm">
-          <strong>Genre:</strong> {movie.genres?.join(", ") || "No genres available"}
+          <strong>Genre:</strong>{" "}
+          {movie.genres?.join(", ") || "No genres available"}
         </p>
         <p className="text-yellow-400 text-sm font-medium">
           <strong>Rating:</strong> {movie.rating || "N/A"}
@@ -127,32 +211,79 @@ function Dashboard() {
         </button>
       </div>
     ));
-    
   };
 
   return (
-    <div className="p-6 bg-gray-900 min-h-screen">
-      {[
-        { title: "🔥 Top Rated", data: movies.topRated },
-        { title: "💖 Romantic", data: movies.romantic },
-        { title: "⚔️ Action", data: movies.action },
-        { title: "🕵️ Thriller", data: movies.thriller },
-      ].map((category) => (
-        <section key={category.title} className="mt-10">
-          <h1 className="text-3xl font-bold text-white mb-4">{category.title}</h1>
-          <div className="relative">
-            <div className="flex overflow-x-auto gap-4 py-2" style={{scrollbarWidth:"none"}}>
-              {renderMovies(category.data)}
-            </div>
-          </div>
-        </section>
-      ))}
-    </div>
-  );
-  
+    <main className="p-6 bg-gray-900 min-h-screen">
+
+      <div>
+      <div className="flex gap-2 items-center justify-center">
+        <input
+          type="text"
+          placeholder="Search Anime..."
+          value={searchValue}
+          onChange={(e) => setSearchValue(e.target.value)}
+          // onFocus={() => setIsSearch(true)}
+          className="w-80 px-4 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400 text-blue-400 "
+        />
+
+        <button
+        onClick={startRecognition} disabled={isListening}
+        >
+          🎤
+        </button>
+        <button
+          onClick={stopRecognition}
+          disabled={!isListening}
+          style={{ marginLeft: 10 }}
+        >
+          🛑
+        </button>
+      </div>
+
+      { searchValue.trim() !== "" ? (
+  searchedArr.length > 0 ? (
+    <section className="mt-10">
+      <h1 className="text-3xl font-bold text-white mb-4">🔍 Search Results</h1>
+      <div className="flex overflow-x-auto gap-4 py-2" style={{ scrollbarWidth: "none" }}>
+        {renderMovies(searchedArr)}
+      </div>
+    </section>
+  ) : (
+    <p className="text-white mt-10 ">🚫 No results found</p>
+  )
+) : (
+  <>
     
+  </>
+)}
 
+
+      </div>
+      <div>
+        {[
+          { title: "🔥 Top Rated", data: movies.topRated },
+          { title: "💖 Romantic", data: movies.romantic },
+          { title: "⚔️ Action", data: movies.action },
+          { title: "🕵️ Thriller", data: movies.thriller },
+        ].map((category) => (
+          <section key={category.title} className="mt-10">
+            <h1 className="text-3xl font-bold text-white mb-4">
+              {category.title}
+            </h1>
+            <div className="relative">
+              <div
+                className="flex overflow-x-auto gap-4 py-2"
+                style={{ scrollbarWidth: "none" }}
+              >
+                {renderMovies(category.data)}
+              </div>
+            </div>
+          </section>
+        ))}
+      </div>
+    </main>
+  );
 }
-
 
 export default Dashboard;

@@ -3,7 +3,7 @@ import Header from "./Components/Header";
 import { Outlet } from "react-router-dom";
 import Footer from "./Components/Footer";
 
-function Index() {
+function LayOut() {
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
@@ -15,4 +15,4 @@ function Index() {
   );
 }
 
-export default Index;
+export default LayOut;

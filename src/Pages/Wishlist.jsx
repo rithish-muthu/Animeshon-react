@@ -51,8 +51,7 @@ const Wishlist = () => {
       if (!user) return;
   
       try {
-        const itemRef = doc(db, `users/${user.uid}/wishlist`, movieId);
-        await deleteDoc(itemRef);
+        await deleteDoc(doc(db, `users/${user.uid}/wishlist`, movieId));
   
         
         setWishlist((prevWishlist) => prevWishlist.filter((movie) => movie.id !== movieId));
