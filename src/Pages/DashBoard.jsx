@@ -13,7 +13,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
-import React, { useEffect, useState,useRef } from "react";
+import React, { useEffect, useState } from "react";
 import { getMoviesByCategory } from "../Components/getMovies";
 import { useNavigate } from "react-router-dom";
 import { handleMovieClick } from "../Components/FirebaseAuth";
@@ -33,7 +33,6 @@ function Dashboard() {
   const [searchedArr, setSearchedArr] = useState([]);
   // const [isSearch, setIsSearch] = useState(false);
   const [searchValue, setSearchValue] = useState("");
-
 
   useEffect(() => {
     async function fetchMovies() {
@@ -60,7 +59,7 @@ function Dashboard() {
 
         setTimeout(() => {
           setLoading(false);
-        }, 0);
+        }, 2000);
       } catch (error) {
         console.error("Error fetching movies:", error);
         setLoading(false);
@@ -70,7 +69,6 @@ function Dashboard() {
     fetchMovies();
   }, []);
 
-
   useEffect(() => {
     if (searchValue.trim() !== "") {
       const allMovies = [
@@ -79,67 +77,16 @@ function Dashboard() {
         ...movies.action,
         ...movies.thriller,
       ];
-  
+
       const filtered = allMovies.filter((movie) =>
         movie.title.toLowerCase().includes(searchValue.toLowerCase())
       );
-  
+
       setSearchedArr(filtered);
     } else {
       setSearchedArr([]);
     }
   }, [searchValue, movies]);
-
-
-
-  const [isListening, setIsListening] = useState(false);
-  const recognitionRef = useRef(null);
-
-  const startRecognition = () => {
-    const SpeechRecognition =
-      window.SpeechRecognition || window.webkitSpeechRecognition;
-
-    if (!SpeechRecognition) {
-      alert(
-        "Your browser doesn't support Speech Recognition. Try using Chrome."
-      );
-      return;
-    }
- 
-
-    const recognition = new SpeechRecognition();
-    recognition.continuous = false; // Stop automatically after one phrase
-    recognition.interimResults = false;
-    recognition.lang = "en-US";
-
-    recognition.onresult = (event) => {
-      const transcript = event.results[0][0].transcript;
-      setSearchValue(transcript);
-    };
-
-    recognition.onerror = (event) => {
-      console.error("Speech recognition error:", event.error);
-    };
-
-    recognition.onend = () => {
-      setIsListening(false);
-    };
-
-    recognition.start();
-    recognitionRef.current = recognition;
-    setIsListening(true);
-  };
-
-  const stopRecognition = () => {
-    if (recognitionRef.current) {
-      recognitionRef.current.stop();
-      setIsListening(false);
-    }
-  };
-
-
-
-
 
   if (loading) {
     return (
@@ -148,18 +95,6 @@ function Dashboard() {
       </div>
     );
   }
-
-
-
-
-  
-  
-  
-
-
-
-
-
 
   const renderMovies = (moviesList) => {
     if (!moviesList.length) {
@@ -215,50 +150,37 @@ function Dashboard() {
 
   return (
     <main className="p-6 bg-gray-900 min-h-screen">
-
       <div>
-      <div className="flex gap-2 items-center justify-center">
-        <input
-          type="text"
-          placeholder="Search Anime..."
-          value={searchValue}
-          onChange={(e) => setSearchValue(e.target.value)}
-          // onFocus={() => setIsSearch(true)}
-          className="w-80 px-4 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400 text-blue-400 "
-        />
+        <div className="flex gap-2 items-center justify-center">
+          <input
+            type="text"
+            placeholder="Search Anime..."
+            value={searchValue}
+            onChange={(e) => setSearchValue(e.target.value)}
+            // onFocus={() => setIsSearch(true)}
+            className="w-80 px-4 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400 text-blue-400 "
+          />
+        </div>
 
-        <button
-        onClick={startRecognition} disabled={isListening}
-        >
-          🎤
-        </button>
-        <button
-          onClick={stopRecognition}
-          disabled={!isListening}
-          style={{ marginLeft: 10 }}
-        >
-          🛑
-        </button>
-      </div>
-
-      { searchValue.trim() !== "" ? (
-  searchedArr.length > 0 ? (
-    <section className="mt-10">
-      <h1 className="text-3xl font-bold text-white mb-4">🔍 Search Results</h1>
-      <div className="flex overflow-x-auto gap-4 py-2" style={{ scrollbarWidth: "none" }}>
-        {renderMovies(searchedArr)}
-      </div>
-    </section>
-  ) : (
-    <p className="text-white mt-10 ">🚫 No results found</p>
-  )
-) : (
-  <>
-    
-  </>
-)}
-
-
+        {searchValue.trim() !== "" ? (
+          searchedArr.length > 0 ? (
+            <section className="mt-10">
+              <h1 className="text-3xl font-bold text-white mb-4">
+                🔍 Search Results
+              </h1>
+              <div
+                className="flex overflow-x-auto gap-4 py-2"
+                style={{ scrollbarWidth: "none" }}
+              >
+                {renderMovies(searchedArr)}
+              </div>
+            </section>
+          ) : (
+            <p className="text-white mt-10 ">No results found</p>
+          )
+        ) : (
+          <></>
+        )}
       </div>
       <div>
         {[

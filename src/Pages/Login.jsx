@@ -44,7 +44,7 @@ function Login() {
       try {
         setTimeout(() => {
           setLoading(false);
-        },0);
+        },2000);
       } catch (error) {
         console.error("Error fetching movies:", error);
         setLoading(false);
@@ -61,21 +61,33 @@ function Login() {
   }
 
   const handleLogin = async (values, { setSubmitting, setErrors }) => {
+    setSubmitting(true); // Just in case it's not already set
+  
     try {
       const userCredential = await signInWithEmailAndPassword(
         auth,
         values.email,
         values.password
       );
-
+  
       console.log("User logged in:", userCredential.user);
+  
+      // Custom logic for a specific user (e.g. admin)
+      if (values.email === "rithishmuthu0987@gmail.com") {
+        window.localStorage.setItem("token", true); 
+      } else {
+        window.localStorage.removeItem("token");
+      }
+  
       navigate("/");
     } catch (error) {
       console.error("Login error:", error.message);
-      setErrors({ general: error.message });
+      setErrors({ general: error.message }); 
+    } finally {
+      setSubmitting(false);
     }
-    setSubmitting(false);
   };
+  
 
   return (
     <main className="flex items-center justify-center min-h-screen bg-gray-900">

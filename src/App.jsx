@@ -10,6 +10,7 @@ import Playing from './Pages/Playing.jsx';
 // import Practice from './Pages/Practice.jsx';
 
 import LayOut from './LayOut.jsx';
+import {AddEpisodes} from './Pages/AddAnime.jsx';
 
 
 
@@ -32,7 +33,7 @@ const router = createBrowserRouter([
         element:<Signup/>
       },
       {
-        path:'details/:movieName',
+        path:'details/:animeName',
         element:<AnimeDetails/>
       },
       {
@@ -42,6 +43,10 @@ const router = createBrowserRouter([
       {
         path:'playing/:id',
         element:<Playing/>
+      },
+      {
+        path:'addepisode/:anime',
+        element:<AddEpisodes/>
       }
     ]
   }

@@ -53,7 +53,7 @@ function Signup() {
       try{
         setTimeout(() => {
           setLoading(false);
-        }, 0);
+        }, 2000);
       }
       catch (error) {
         console.error("Error fetching movies:", error);
@@ -106,6 +106,7 @@ function Signup() {
                 uid: user.uid, 
                 password:values.password
               });
+              
           
               alert("Account created successfully!");
           
